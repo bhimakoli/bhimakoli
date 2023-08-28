@@ -20,9 +20,9 @@ jobs:
         with:
           python-version: 3.x
 
-      - name: Install rundeck-api library
+      - name: Install Dependencies
         run: |
-          pip install rundeck-api
+          pip install requests
 
       - name: Trigger Rundeck Job
         env:
