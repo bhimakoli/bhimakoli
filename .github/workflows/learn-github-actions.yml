@@ -1,13 +1,39 @@
-name: learn-github-actions
-run-name: ${{ github.actor }} is learning GitHub Actions
-on: [push]
+name: Manual Rundeck Trigger
+
+on:
+  workflow_dispatch:
+    inputs:
+      instance_ip:
+        description: 'Instance IP'
+        required: true
+      command_to_execute:
+        description: 'Command to Execute'
+        required: true
+
 jobs:
-  check-bats-version:
+  trigger_job:
     runs-on: ubuntu-latest
+
     steps:
-      - uses: actions/checkout@v3
-      - uses: actions/setup-node@v3
-        with:
-          node-version: '14'
-      - run: npm install -g bats
-      - run: bats -v
+      - name: Trigger Rundeck Job
+        env:
+          RUNDECK_TOKEN: ${{ secrets.RUNDECK_API_TOKEN }}  
+          RUNDECK_JOB_ID: 64ef7739-4eea-4cdd-b2c3-6b1c7c716d0e  
+        run: |
+          python -c "
+          import os
+          from rundeck import Rundeck
+
+          api = Rundeck(api_token=os.environ['RUNDECK_TOKEN'], server='https://rundeck-prod.entrata.io')
+
+          job_id = os.environ['RUNDECK_JOB_ID']
+          instance_ip = '${{ github.event.inputs.instance_ip }}'
+          command = '${{ github.event.inputs.command_to_execute }}'
+
+          response = api.run_job(
+              id=job_id,
+              argString='-instance-ip {} -command-to-execute "{}"'.format(instance_ip, command)
+          )
+
+          print(response)
+          "
