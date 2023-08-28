@@ -26,23 +26,9 @@ jobs:
 
       - name: Trigger Rundeck Job
         env:
-          RUNDECK_TOKEN: ${{ secrets.RUNDECK_API_TOKEN }}  # Add your Rundeck API token as a secret
-          RUNDECK_JOB_ID: 64ef7739-4eea-4cdd-b2c3-6b1c7c716d0e  # Replace with your Rundeck job ID
-        run: |
-          python -c "
-          import os
-          from rundeck import Rundeck
-
-          api = Rundeck(api_token=os.environ['RUNDECK_TOKEN'], server='https://rundeck-prod.entrata.io')
-
-          job_id = os.environ['RUNDECK_JOB_ID']
-          instance_ip = '${{ github.event.inputs.instance_ip }}'
+          rundeck-url: https://rundeck-prod.entrata.io
+		  rundeck-token: ${{ secrets.RUNDECK_TOKEN_PROD }}
+          rundeck-job-id: 64ef7739-4eea-4cdd-b2c3-6b1c7c716d0e
+		  instance_ip = '${{ github.event.inputs.instance_ip }}'
           command = '${{ github.event.inputs.command_to_execute }}'
-
-          response = api.run_job(
-              id=job_id,
-              argString='-instance-ip {} -command-to-execute "{}"'.format(instance_ip, command)
-          )
-
-          print(response)
-          "
+		  
