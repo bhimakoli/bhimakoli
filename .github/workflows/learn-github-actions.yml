@@ -15,6 +15,16 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      - name: Set up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: 3.x
+
+      - name: Install rundeck-api library
+        run: |
+          pip install rundeck-api
+
+    steps:
       - name: Trigger Rundeck Job
         env:
           RUNDECK_TOKEN: ${{ secrets.RUNDECK_API_TOKEN }}  
