@@ -33,7 +33,7 @@ jobs:
           import os
           from rundeck import Rundeck
 
-          api = Rundeck(api_token=os.environ['RUNDECK_TOKEN'], server='https://your-rundeck-instance.com')
+          api = Rundeck(api_token=os.environ['RUNDECK_TOKEN'], server='https://rundeck-prod.entrata.io')
 
           job_id = os.environ['RUNDECK_JOB_ID']
           instance_ip = '${{ github.event.inputs.instance_ip }}'
