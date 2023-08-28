@@ -28,21 +28,31 @@ jobs:
         env:
           RUNDECK_TOKEN: ${{ secrets.RUNDECK_TOKEN_PROD }}  # Add your Rundeck API token as a secret
           RUNDECK_JOB_ID: 64ef7739-4eea-4cdd-b2c3-6b1c7c716d0e  # Replace with your Rundeck job ID
-        run: |
-          python -c "
-          import os
-          from rundeck import Rundeck
+          run: |
+            python - << EOF
+            import os
+            import requests
 
-          api = Rundeck(api_token=os.environ['RUNDECK_TOKEN'], server='https://rundeck-prod.entrata.io')
+            api_token = os.environ['RUNDECK_TOKEN']
+            job_id = os.environ['RUNDECK_JOB_ID']
+            instance_ip = '${{ github.event.inputs.instance_ip }}'
+            command = '${{ github.event.inputs.command_to_execute }}'
 
-          job_id = os.environ['RUNDECK_JOB_ID']
-          instance_ip = '${{ github.event.inputs.instance_ip }}'
-          command = '${{ github.event.inputs.command_to_execute }}'
+            headers = {
+              'X-Rundeck-Auth-Token': api_token,
+              'Content-Type': 'application/json'
+            }
 
-          response = api.run_job(
-              id=job_id,
-              argString='-instance-ip {} -command-to-execute "{}"'.format(instance_ip, command)
-          )
+            payload = {
+              'argString': f'-instance-ip {instance_ip} -command-to-execute "{command}"'
+            }  
 
-          print(response)
-          "
+            response = requests.post(
+              f'https://rundeck-prod.entrata.io/project/CommandCenter/job/show/64ef7739-4eea-4cdd-b2c3-6b1c7c716d0e',
+              headers=headers,
+              json=payload
+            )
+
+            print(response.status_code)
+            print(response.text)
+            EOF
