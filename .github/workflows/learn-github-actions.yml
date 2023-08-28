@@ -18,15 +18,13 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v2
         with:
-          python-version: 3.x
-
-      
+          python-version: 3.x 
 
       - name: Trigger Rundeck Job
         env:
           RUNDECK_TOKEN: ${{ secrets.RUNDECK_TOKEN_PROD }}  # Add your Rundeck API token as a secret
           RUNDECK_JOB_ID: 64ef7739-4eea-4cdd-b2c3-6b1c7c716d0e  # Replace with your Rundeck job ID
-        un: |
+        run: |
           python - << EOF
           import os
           import requests
