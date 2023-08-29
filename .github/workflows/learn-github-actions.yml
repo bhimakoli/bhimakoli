@@ -47,7 +47,7 @@ jobs:
           }
 
           response = requests.post(
-              f'https://rundeck-prod.entrata.io/api/32/job/{job_id}/run',
+              f'https://rundeck-prod.entrata.io/project/CommandCenter/job/show/64ef7739-4eea-4cdd-b2c3-6b1c7c716d0e',
               headers=headers,
               json=payload
           )
