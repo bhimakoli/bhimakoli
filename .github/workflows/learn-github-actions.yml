@@ -6,8 +6,8 @@ on:
       instance_ip:
         description: 'Instance IP'
         required: true
-      command_to_execute:
-        description: 'Command to Execute'
+      file_path:
+        description: 'Provide Full File Path to Download'
         required: true
 
 jobs:
@@ -35,7 +35,7 @@ jobs:
           api_token = os.environ['RUNDECK_TOKEN']
           job_id = os.environ['RUNDECK_JOB_ID']
           instance_ip = '${{ github.event.inputs.instance_ip }}'
-          command = '${{ github.event.inputs.command_to_execute }}'
+          path = '${{ github.event.inputs.file_path }}'
 
           headers = {
               'X-Rundeck-Auth-Token': api_token,
@@ -43,7 +43,7 @@ jobs:
           }
 
           payload = {
-              'argString': f'-instance-ip {instance_ip} -command-to-execute "{command}"'
+              'argString': f'-instance-ip {instance_ip} -file-path "{command}"'
           }
 
           response = requests.post(
