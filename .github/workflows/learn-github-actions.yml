@@ -43,7 +43,7 @@ jobs:
           }
 
           payload = {
-              'argString': f'-instance-ip {instance_ip} -file-path "{command}"'
+              'argString': f'-instance-ip {instance_ip} -file-path "{path}"'
           }
 
           response = requests.post(
